@@ -27,14 +27,14 @@ func Run(token string, interval int) error {
   }
 }
 func NewGithubClient(token string, ctx context.Context) *GithubClient {
-	return &GithubClient{
+  return &GithubClient{
     client: github.NewClient(
-			oauth2.NewClient(
-				ctx,
-				oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token}),
-			),
-		),
-	}
+      oauth2.NewClient(
+        ctx,
+        oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token}),
+      ),
+    ),
+  }
 }
 
 func (c *GithubClient) GetNotifications(ctx context.Context) ([]*github.Notification, error) {
