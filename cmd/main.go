@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-  "github.com/nhudson/polybar-gh-notifications/internal/github"
+  "github.com/nhudson/polybar-gh-notification/internal/github"
 	"github.com/spf13/cobra"
 )
 

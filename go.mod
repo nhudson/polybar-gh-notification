@@ -1,4 +1,4 @@
-module github.com/nhudson/polybar-gh-notifications
+module github.com/nhudson/polybar-gh-notification
 
 go 1.20
 
