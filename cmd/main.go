@@ -18,6 +18,9 @@ func main() {
     Use: "poly-gh-notifier [cmd]",
     Short: "Poll Github API for notifications",
     RunE: func(cmd *cobra.Command, args []string) error {
+      if githubToken == "" {
+        return fmt.Errorf("github token is required")
+      }
       return github.Run(githubToken, interval)
     },
   }

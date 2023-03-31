@@ -17,15 +17,27 @@ func Run(token string, interval int) error {
   // Setup Github client
   gh := NewGithubClient(token, context.Background())
   for {
-    _, err := gh.GetNotifications(context.Background())
+    notifications, err := gh.GetNotifications(context.Background())
     if err != nil {
       fmt.Println("Error: ", err)
       os.Exit(1)
     }
 
+    // Get a count of how many notifications are unread
+    unread := 0
+    for _, notification := range notifications {
+      if *notification.Unread {
+        unread++
+      }
+    }
+
+    // Print the count
+    fmt.Printf("  : %d\n", unread)
+
     time.Sleep(time.Second * time.Duration(interval))
   }
 }
+
 func NewGithubClient(token string, ctx context.Context) *GithubClient {
   return &GithubClient{
     client: github.NewClient(
@@ -37,21 +49,17 @@ func NewGithubClient(token string, ctx context.Context) *GithubClient {
   }
 }
 
-func (c *GithubClient) GetNotifications(ctx context.Context) ([]*github.Notification, error) {
+func (gc *GithubClient) GetNotifications(ctx context.Context) ([]*github.Notification, error) {
 
   // Set ListNotificationsOptions
   opt := &github.NotificationListOptions{
-    ListOptions: github.ListOptions{PerPage: 10},
+    All: true,
   }
-  notifications, _, err := c.client.Activity.ListNotifications(ctx, opt)
+
+  notifications, _, err := gc.client.Activity.ListNotifications(ctx, opt)
   if err != nil {
     fmt.Println("Error: ", err)
     os.Exit(1)
-  }
-
-  // Print GetNotifications 
-  for _, notification := range notifications {
-    fmt.Println("Notification: ", notification)
   }
 
   return notifications, nil
